@@ -1,4 +1,4 @@
-﻿namespace WebStore.ViewModels;
+﻿namespace WebStore.Domain.ViewModels;
 
 public class UserOrderViewModel
 {
@@ -6,9 +6,9 @@ public class UserOrderViewModel
 
     public DateTimeOffset Date { get; set; }
 
-    public string Address { get; set; }
+    public string? Address { get; set; }
 
-    public string Phone { get; set; }
+    public string? Phone { get; set; }
 
     public decimal TotalPrice { get; set; }
 

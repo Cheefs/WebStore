@@ -1,8 +1,8 @@
 ﻿using System.Text.Json;
 using WebStore.Domain.Entities;
+using WebStore.Domain.ViewModels;
 using WebStore.Infrastructure.Mapping;
-using WebStore.Services.Interfaces;
-using WebStore.ViewModels;
+using WebStore.Interfaces.Services;
 
 namespace WebStore.Services.InCookies;
 
@@ -87,7 +87,7 @@ public class InCookiesCartService : ICartService
             Ids = cart.Items.Select(item => item.ProductId).ToArray(),
         });
 
-        var products_views = products.ToView().ToDictionary(p => p.Id);
+        var products_views = products.ToView().ToDictionary(p => p!.Id);
 
         return new()
         {
