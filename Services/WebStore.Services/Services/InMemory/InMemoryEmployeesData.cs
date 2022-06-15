@@ -1,8 +1,9 @@
-﻿using WebStore.Data;
+﻿using Microsoft.Extensions.Logging;
 using WebStore.Domain.Entities;
 using WebStore.Interfaces.Services;
+using WebStore.Services.Data;
 
-namespace WebStore.Services.InMemory;
+namespace WebStore.Services.Services.InMemory;
 
 public class InMemoryEmployeesData : IEmployeesData
 {
@@ -36,7 +37,7 @@ public class InMemoryEmployeesData : IEmployeesData
 
         if (Skip > 0)
         {
-            if(Skip > _Employees.Count) return Enumerable.Empty<Employee>();
+            if (Skip > _Employees.Count) return Enumerable.Empty<Employee>();
 
             query = query.Skip(Skip);
         }

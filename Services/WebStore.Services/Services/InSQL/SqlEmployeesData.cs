@@ -1,9 +1,10 @@
-﻿using WebStore.DAL.Context;
+﻿using Microsoft.Extensions.Logging;
+using WebStore.DAL.Context;
 using WebStore.DAL.Migrations;
 using WebStore.Domain.Entities;
 using WebStore.Interfaces.Services;
 
-namespace WebStore.Services.InSQL;
+namespace WebStore.Services.Services.InSQL;
 
 public class SqlEmployeesData : IEmployeesData
 {
@@ -26,7 +27,7 @@ public class SqlEmployeesData : IEmployeesData
 
         IQueryable<Employee> query = _db.Employees;
 
-        if(Skip > 0)
+        if (Skip > 0)
             query = query.Skip(Skip);
 
         return query.Take(Take);

@@ -1,10 +1,11 @@
-﻿using System.Text.Json;
+﻿using Microsoft.AspNetCore.Http;
+using System.Text.Json;
 using WebStore.Domain.Entities;
 using WebStore.Domain.ViewModels;
-using WebStore.Infrastructure.Mapping;
 using WebStore.Interfaces.Services;
+using WebStore.Services.Mapping;
 
-namespace WebStore.Services.InCookies;
+namespace WebStore.Services.Services.InCookies;
 
 public class InCookiesCartService : ICartService
 {
@@ -26,7 +27,7 @@ public class InCookiesCartService : ICartService
                 cookies.Append(_CartName, JsonSerializer.Serialize(cart));
                 return cart;
             }
-            
+
             ReplaceCart(cookies, cart_cookie);
             return JsonSerializer.Deserialize<Cart>(cart_cookie)!;
         }
