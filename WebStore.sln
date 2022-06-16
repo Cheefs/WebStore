@@ -28,7 +28,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebStore.Interfaces", "Serv
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebStore.Services", "Services\WebStore.Services\WebStore.Services.csproj", "{EAFB21AD-95EC-4346-9B0A-60D7C3B922AD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebStore.WebAPI", "WebStore.WebAPI\WebStore.WebAPI.csproj", "{812FC050-8809-41FF-BF91-3F3C4004C59E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebStore.WebAPI", "WebStore.WebAPI\WebStore.WebAPI.csproj", "{812FC050-8809-41FF-BF91-3F3C4004C59E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebStore.WebAPI.Clients", "WebStore.WebAPI.Clients\WebStore.WebAPI.Clients.csproj", "{B9795CA8-E655-48CF-A386-A874EA644EB4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -64,6 +66,10 @@ Global
 		{812FC050-8809-41FF-BF91-3F3C4004C59E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{812FC050-8809-41FF-BF91-3F3C4004C59E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{812FC050-8809-41FF-BF91-3F3C4004C59E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B9795CA8-E655-48CF-A386-A874EA644EB4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9795CA8-E655-48CF-A386-A874EA644EB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9795CA8-E655-48CF-A386-A874EA644EB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9795CA8-E655-48CF-A386-A874EA644EB4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -76,6 +82,7 @@ Global
 		{43374433-DE66-4DC4-AC73-D92D22B4681F} = {52D0744B-7E17-418B-BE84-F0B04CEE50A2}
 		{EAFB21AD-95EC-4346-9B0A-60D7C3B922AD} = {52D0744B-7E17-418B-BE84-F0B04CEE50A2}
 		{812FC050-8809-41FF-BF91-3F3C4004C59E} = {52D0744B-7E17-418B-BE84-F0B04CEE50A2}
+		{B9795CA8-E655-48CF-A386-A874EA644EB4} = {52D0744B-7E17-418B-BE84-F0B04CEE50A2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {64F593E4-E3ED-44B5-A0B1-27ECA56D6851}

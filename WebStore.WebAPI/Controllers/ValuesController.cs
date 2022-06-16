@@ -33,9 +33,10 @@ namespace WebStore.WebAPI.Controllers
             }
             return NotFound(new { Id });
         }
+
         [HttpPost]
         [HttpPost("{Value}")]
-        public IActionResult Add([FromBody] string Value)
+        public IActionResult Add(string Value)
         {
             var id = _values.LastOrDefault().Key + 1;
             _values[id] = Value;
