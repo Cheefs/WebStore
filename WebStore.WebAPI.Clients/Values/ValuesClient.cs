@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Net;
+using System.Net.Http.Json;
 using WebStore.Interfaces.TestApi;
 using WebStore.WebAPI.Clients.Base;
 
@@ -10,29 +7,56 @@ namespace WebStore.WebAPI.Clients.Values
 {
     public class ValuesClient : BaseClient, IValueService
     {
-        public void Add(string Value)
+        public IEnumerable<string> GetValues()
         {
-            throw new NotImplementedException();
+            var response = Http.GetAsync(Address).Result;
+
+            if (response.IsSuccessStatusCode)
+            {
+                return response.Content.ReadFromJsonAsync<IEnumerable<string>>().Result!;
+            }
+
+            return Enumerable.Empty<string>();
         }
 
-        public bool Delete(int Id)
+        public string? GetById(int Id)
         {
-            throw new NotImplementedException();
+            var response = Http.GetAsync($"{Address}/{Id}").Result;
+
+            if (response.IsSuccessStatusCode)
+            {
+                return response.Content.ReadFromJsonAsync<string>().Result!;
+            }
+
+            return null;
+        }
+
+        public void Add(string Value)
+        {
+            var response = Http.PostAsJsonAsync(Address, Value).Result;
+            response.EnsureSuccessStatusCode();
         }
 
         public void Edit(int Id, string Value)
         {
-            throw new NotImplementedException();
+            var response = Http.PutAsJsonAsync($"{Address}/{Id}", Value).Result;
+            response.EnsureSuccessStatusCode();
         }
 
-        public string GetById(int Id)
+        public bool Delete(int Id)
         {
-            throw new NotImplementedException();
+            var response = Http.DeleteAsync($"{Address}/{Id}").Result;
+
+            if (response.IsSuccessStatusCode)
+                return true;
+            if(response.StatusCode == HttpStatusCode.NotFound)
+                return false;
+
+            response.EnsureSuccessStatusCode();
+            throw new InvalidOperationException();
+
         }
 
-        public IEnumerable<string> GetValues()
-        {
-            throw new NotImplementedException();
-        }
+
     }
 }
