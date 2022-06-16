@@ -4,6 +4,10 @@
     {
         protected HttpClient Http { get; }
         protected string Address { get; }
-        protected BaseClient(HttpClient client, string address) => (Http, Address) = (client, address);
+        protected BaseClient(HttpClient client, string address)
+        {
+            Http = client;
+            Address = address;
+        }
     }
 }

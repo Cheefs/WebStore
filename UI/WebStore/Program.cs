@@ -9,6 +9,8 @@ using WebStore.Infrastructure.Middleware;
 using WebStore.Interfaces.Services;
 using WebStore.Services.Services.InCookies;
 using WebStore.Services.Services.InSQL;
+using WebStore.Interfaces.TestApi;
+using WebStore.WebAPI.Clients.Values;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -68,6 +70,8 @@ services.ConfigureApplicationCookie(opt =>
 
     opt.SlidingExpiration = true;
 });
+
+services.AddHttpClient<IValuesService, ValuesClient>(client => client.BaseAddress = new(config["WebAPI"]));
 
 //services.AddScoped<IEmployeesData, InMemoryEmployeesData>();
 services.AddScoped<IEmployeesData, SqlEmployeesData>();

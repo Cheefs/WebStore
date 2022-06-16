@@ -1,6 +1,6 @@
 ﻿namespace WebStore.Interfaces.TestApi
 {
-    public interface IValueService
+    public interface IValuesService
     {
         IEnumerable<string> GetValues();
         string? GetById(int Id);

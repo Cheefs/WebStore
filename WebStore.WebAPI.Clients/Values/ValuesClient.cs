@@ -5,8 +5,10 @@ using WebStore.WebAPI.Clients.Base;
 
 namespace WebStore.WebAPI.Clients.Values
 {
-    public class ValuesClient : BaseClient, IValueService
+    public class ValuesClient : BaseClient, IValuesService
     {
+        public ValuesClient(HttpClient http) : base(http, "api/values") { }
+
         public IEnumerable<string> GetValues()
         {
             var response = Http.GetAsync(Address).Result;
@@ -49,14 +51,11 @@ namespace WebStore.WebAPI.Clients.Values
 
             if (response.IsSuccessStatusCode)
                 return true;
-            if(response.StatusCode == HttpStatusCode.NotFound)
+            if (response.StatusCode == HttpStatusCode.NotFound)
                 return false;
 
             response.EnsureSuccessStatusCode();
             throw new InvalidOperationException();
-
         }
-
-
     }
 }
