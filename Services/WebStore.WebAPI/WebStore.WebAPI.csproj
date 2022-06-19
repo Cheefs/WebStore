@@ -11,9 +11,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Data\WebStore.DAL.Sqlite\WebStore.DAL.Sqlite.csproj" />
-    <ProjectReference Include="..\Data\WebStore.DAL\WebStore.DAL.csproj" />
-    <ProjectReference Include="..\Services\WebStore.Services\WebStore.Services.csproj" />
+    <ProjectReference Include="..\..\Data\WebStore.DAL.Sqlite\WebStore.DAL.Sqlite.csproj" />
+    <ProjectReference Include="..\..\Data\WebStore.DAL\WebStore.DAL.csproj" />
+    <ProjectReference Include="..\WebStore.Services\WebStore.Services.csproj" />
   </ItemGroup>
 
 </Project>
