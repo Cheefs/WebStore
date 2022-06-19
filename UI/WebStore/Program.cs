@@ -8,11 +8,11 @@ using WebStore.Infrastructure.Conventions;
 using WebStore.Infrastructure.Middleware;
 using WebStore.Interfaces.Services;
 using WebStore.Services.Services.InCookies;
-using WebStore.Services.Services.InSQL;
 using WebStore.Interfaces.TestApi;
 using WebStore.WebAPI.Clients.Values;
 using WebStore.WebAPI.Clients.Employees;
 using WebStore.WebAPI.Clients.Products;
+using WebStore.WebAPI.Clients.Orders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -75,9 +75,9 @@ services.ConfigureApplicationCookie(opt =>
 
 services.AddHttpClient<IValuesService, ValuesClient>(client => client.BaseAddress = new(config["WebAPI"]))
     .AddTypedClient<IEmployeesData, EmployeesClient>()
-    .AddTypedClient<IProductData, PrductsClient>();
+    .AddTypedClient<IProductData, PrductsClient>()
+    .AddTypedClient<IOrderService, OrdersClient>();
 
-services.AddScoped<IOrderService, SqlOrderService>();
 services.AddScoped<ICartService, InCookiesCartService>();
 
 services.AddControllersWithViews(opt =>
