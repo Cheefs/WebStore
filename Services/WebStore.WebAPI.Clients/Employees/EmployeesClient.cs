@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Net.Http.Json;
 using WebStore.Domain.Entities;
+using WebStore.Interfaces;
 using WebStore.Interfaces.Services;
 using WebStore.WebAPI.Clients.Base;
 
@@ -8,7 +9,7 @@ namespace WebStore.WebAPI.Clients.Employees;
 
 public class EmployeesClient : BaseClient, IEmployeesData
 {
-    public EmployeesClient(HttpClient client) : base(client, "api/employees") { }
+    public EmployeesClient(HttpClient client) : base(client, WebApiAdresses.V1.Employees) { }
 
     public int GetCount() => Get<int>($"{Address}/count");
 
