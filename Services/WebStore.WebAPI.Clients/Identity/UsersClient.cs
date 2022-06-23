@@ -4,11 +4,12 @@ using System.Security.Claims;
 using WebStore.Domain.DTO.Identity;
 using WebStore.Domain.Entities.Identity;
 using WebStore.Interfaces;
+using WebStore.Interfaces.Services.Identity;
 using WebStore.WebAPI.Clients.Base;
 
 namespace WebStore.WebAPI.Clients.Identity;
 
-public class UsersClient : BaseClient
+public class UsersClient : BaseClient, IUsersClient
 {
     public UsersClient(HttpClient client) : base(client, WebApiAdresses.V1.Identity.Users) {}
 
@@ -80,7 +81,7 @@ public class UsersClient : BaseClient
 
     public async Task<IdentityResult> UpdateAsync(User user, CancellationToken cancel)
     {
-        var response = await PutAsync($"{Address}", user, cancel);
+        var response = await PutAsync(Address, user, cancel);
         var result = await response
            .EnsureSuccessStatusCode()
            .Content
@@ -106,11 +107,18 @@ public class UsersClient : BaseClient
             : IdentityResult.Failed();
     }
 
-    public async Task<User?> FindByIdAsync(string id, CancellationToken cancel) =>
-        await GetAsync<User>($"{Address}/find/{id}", cancel).ConfigureAwait(false);
+    public async Task<User> FindByIdAsync(string id, CancellationToken cancel)
+    {
+        var result = await GetAsync<User>($"{Address}/find/{id}", cancel).ConfigureAwait(false);
+        return result!;
+    }
+        
 
-    public async Task<User?> FindByNameAsync(string name, CancellationToken cancel) =>
-        await GetAsync<User>($"{Address}/normal/{name}", cancel).ConfigureAwait(false);
+    public async Task<User> FindByNameAsync(string name, CancellationToken cancel)
+    {
+        var result = await GetAsync<User>($"{Address}/normal/{name}", cancel).ConfigureAwait(false);
+        return result!;
+    } 
 
     #endregion
 

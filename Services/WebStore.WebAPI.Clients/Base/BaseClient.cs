@@ -67,7 +67,7 @@ public abstract class BaseClient: IDisposable
 
     protected async Task<HttpResponseMessage> PutAsync<T>(string url, T body, CancellationToken cancellationToken = default)
     {
-        var response = await Http.PostAsJsonAsync(url, body, cancellationToken).ConfigureAwait(false);
+        var response = await Http.PutAsJsonAsync(url, body, cancellationToken).ConfigureAwait(false);
         return response.EnsureSuccessStatusCode();
     }
 

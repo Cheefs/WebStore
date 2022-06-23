@@ -11,23 +11,23 @@ var builder = WebApplication.CreateBuilder(args);
 var config = builder.Configuration;
 var services = builder.Services;
 
-var db_type = config["DB:Type"];
-var db_connection_string = config.GetConnectionString(db_type);
+var dbType = config["DB:Type"];
+var dbConnectionString = config.GetConnectionString(dbType);
 
-switch (db_type)
+switch (dbType)
 {
     case "DockerDB":
     case "SqlServer":
-        services.AddDbContext<WebStoreDB>(opt => opt.UseSqlServer(db_connection_string));
+        services.AddDbContext<WebStoreDB>(opt => opt.UseSqlServer(dbConnectionString));
         break;
     case "Sqlite":
-        services.AddDbContext<WebStoreDB>(opt => opt.UseSqlite(db_connection_string, o => o.MigrationsAssembly("WebStore.DAL.Sqlite")));
+        services.AddDbContext<WebStoreDB>(opt => opt.UseSqlite(dbConnectionString, o => o.MigrationsAssembly("WebStore.DAL.Sqlite")));
         break;
 }
 
 services.AddScoped<DbInitializer>();
 
-services.AddIdentity<User, Role>(/*opt => { opt... }*/)
+services.AddIdentity<User, Role>()
    .AddEntityFrameworkStores<WebStoreDB>()
    .AddDefaultTokenProviders();
 
@@ -60,6 +60,14 @@ services.AddEndpointsApiExplorer();
 services.AddSwaggerGen();
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var db_initializer = scope.ServiceProvider.GetRequiredService<DbInitializer>();
+    await db_initializer.InitializeAsync(
+        RemoveBefore: app.Configuration.GetValue("DB:Recreate", false),
+        AddTestData: app.Configuration.GetValue("DB:AddTestData", false));
+}
 
 if (app.Environment.IsDevelopment())
 {
