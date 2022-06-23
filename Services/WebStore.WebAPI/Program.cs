@@ -1,6 +1,10 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.EntityFrameworkCore;
+using Swashbuckle.AspNetCore.SwaggerGen;
+using System.Reflection;
 using WebStore.DAL.Context;
+using WebStore.Domain.Entities;
 using WebStore.Domain.Entities.Identity;
 using WebStore.Interfaces.Services;
 using WebStore.Services.Data;
@@ -55,9 +59,32 @@ services.AddScoped<IProductData, SqlProductData>();
 services.AddScoped<IOrderService, SqlOrderService>();
 
 
-services.AddControllers();
+services.AddControllers(opt =>
+{
+    opt.InputFormatters.Add(new XmlSerializerInputFormatter(opt));
+    opt.OutputFormatters.Add(new XmlSerializerOutputFormatter());
+});
+
 services.AddEndpointsApiExplorer();
-services.AddSwaggerGen();
+services.AddSwaggerGen(opt =>
+{
+    var webstore_webapi_xml = Path.ChangeExtension(Path.GetFileName(typeof(Program).Assembly.Location), ".xml");
+    var webstore_domain_xml = Path.ChangeExtension(Path.GetFileName(typeof(Product).Assembly.Location), ".xml");
+
+    IncludeDocumentation<Program>(opt);
+    IncludeDocumentation<Product>(opt);
+});
+
+static void IncludeDocumentation<T>(SwaggerGenOptions opt)
+{
+    var fileName = Path.ChangeExtension(Path.GetFileName(typeof(T).Assembly.Location), ".xml");
+    const string debugPath = "bin/Debug/net6.0";
+
+    if (File.Exists(fileName))
+        opt.IncludeXmlComments(fileName);
+    else if (File.Exists(Path.Combine(debugPath, fileName)))
+        opt.IncludeXmlComments(Path.Combine(debugPath, fileName));
+}
 
 var app = builder.Build();
 

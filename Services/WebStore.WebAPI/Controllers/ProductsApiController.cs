@@ -6,6 +6,7 @@ using WebStore.Interfaces.Services;
 
 namespace WebStore.WebAPI.Controllers;
 
+/// <summary>Апи продуктов</summary>
 [ApiController]
 [Route(WebApiAdresses.V1.Products)]
 public class ProductsApiController : ControllerBase
@@ -19,9 +20,14 @@ public class ProductsApiController : ControllerBase
         this._logger = logger;
     }
 
+    /// <summary>Получить все секции</summary>
     [HttpGet("sections")]
     public IActionResult GetSections() => Ok(_productData.GetSections().ToDTO());
 
+    /// <summary>
+    /// Получить секцию по идентификатору
+    /// </summary>
+    /// <param name="id">Идентификатор</param>
     [HttpGet("sections/{id:int}")]
     public IActionResult GetSectionById(int id)
     {
@@ -33,9 +39,16 @@ public class ProductsApiController : ControllerBase
         return Ok(result.ToDTO());
     }
 
+    /// <summary>
+    /// Получить все бренды
+    /// </summary>
     [HttpGet("brands")]
     public IActionResult GetBrands() => Ok(_productData.GetBrands().ToDTO());
 
+    /// <summary>
+    /// Получить секцию по идентификатору
+    /// </summary>
+    /// <param name="id">Идентификатор</param>
     [HttpGet("brands/{id:int}")]
     public IActionResult GetBrandById(int id)
     {
@@ -49,6 +62,10 @@ public class ProductsApiController : ControllerBase
         return Ok(result.ToDTO());
     }
 
+    /// <summary>
+    /// Получить продукты используя фильтр
+    /// </summary>
+    /// <param name="productFilter">Фильтр продуктов</param>
     [HttpPost]
     public IActionResult GetProducts([FromBody] ProductFilter productFilter)
     {
@@ -59,7 +76,10 @@ public class ProductsApiController : ControllerBase
         }
         return NoContent();
     }
-
+    /// <summary>
+    /// Получить продукт по идентификатору
+    /// </summary>
+    /// <param name="id">Идентификатор</param>
     [HttpGet("{id:int}")]
     public IActionResult GetProductById(int id)
     {
