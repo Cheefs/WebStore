@@ -13,8 +13,8 @@ public static class WebApiAdresses
 
         public static class Identity
         {
-            public const string Users = $"api/v{VERSION}/users";
-            public const string Roles = $"api/v{VERSION}/roles";
+            public const string Users = $"api/v{VERSION}/identity/users";
+            public const string Roles = $"api/v{VERSION}/identity/roles";
         }
     }
 }
