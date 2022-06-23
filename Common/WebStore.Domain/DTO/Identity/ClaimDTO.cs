@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace WebStore.Domain.DTO.Identity;
 
-public abstract class ClaimDTO: UserDTO
+public class ClaimDTO: UserDTO
 {
     public IEnumerable<Claim> Claims { get; init; } = null!;
 }
