@@ -13,8 +13,10 @@ using Microsoft.AspNetCore.Identity;
 using WebStore.Interfaces.Services.Identity;
 using Polly;
 using Polly.Extensions.Http;
+using WebStore.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Logging.AddLog4Net();
 
 var config = builder.Configuration;
 var services = builder.Services;
