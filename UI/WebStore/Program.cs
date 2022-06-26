@@ -14,9 +14,23 @@ using WebStore.Interfaces.Services.Identity;
 using Polly;
 using Polly.Extensions.Http;
 using WebStore.Logging;
+using Serilog;
+using Serilog.Events;
+using Serilog.Formatting.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Logging.AddLog4Net();
+
+builder.Host.UseSerilog((host, log) => log.ReadFrom.Configuration(host.Configuration)
+   .MinimumLevel.Debug()
+   .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+   .Enrich.FromLogContext()
+   .WriteTo.Console(
+        outputTemplate: "[{Timestamp:HH:mm:ss.fff} {Level:u3}]{SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}")
+   .WriteTo.RollingFile($@".\Logs\WebStore[{DateTime.Now:yyyy-MM-ddTHH-mm-ss}].log")
+   .WriteTo.File(new JsonFormatter(",\r\n", true), $@".\Logs\WebStore[{DateTime.Now:yyyy-MM-ddTHH-mm-ss}].log.json")
+   .WriteTo.Seq(host.Configuration["SeqAddress"])
+);
 
 var config = builder.Configuration;
 var services = builder.Services;
