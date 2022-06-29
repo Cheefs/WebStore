@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using WebStore.Interfaces;
 
 namespace WebStore.WebAPI.Controllers
 {
     [ApiController]
-    [Route("api/values")]
+    [Route(WebApiAdresses.V1.Values)]
     public class ValuesController : ControllerBase
     {
         private readonly ILogger<ValuesController> _logger;

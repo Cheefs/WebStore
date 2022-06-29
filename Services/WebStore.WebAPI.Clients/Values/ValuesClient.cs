@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Net.Http.Json;
+using WebStore.Interfaces;
 using WebStore.Interfaces.TestApi;
 using WebStore.WebAPI.Clients.Base;
 
@@ -7,7 +8,7 @@ namespace WebStore.WebAPI.Clients.Values
 {
     public class ValuesClient : BaseClient, IValuesService
     {
-        public ValuesClient(HttpClient http) : base(http, "api/values") { }
+        public ValuesClient(HttpClient http) : base(http, WebApiAdresses.V1.Values) { }
 
         public IEnumerable<string> GetValues()
         {

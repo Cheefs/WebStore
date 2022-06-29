@@ -1,6 +1,10 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.EntityFrameworkCore;
+using Swashbuckle.AspNetCore.SwaggerGen;
+using System.Reflection;
 using WebStore.DAL.Context;
+using WebStore.Domain.Entities;
 using WebStore.Domain.Entities.Identity;
 using WebStore.Interfaces.Services;
 using WebStore.Services.Data;
@@ -11,23 +15,23 @@ var builder = WebApplication.CreateBuilder(args);
 var config = builder.Configuration;
 var services = builder.Services;
 
-var db_type = config["DB:Type"];
-var db_connection_string = config.GetConnectionString(db_type);
+var dbType = config["DB:Type"];
+var dbConnectionString = config.GetConnectionString(dbType);
 
-switch (db_type)
+switch (dbType)
 {
     case "DockerDB":
     case "SqlServer":
-        services.AddDbContext<WebStoreDB>(opt => opt.UseSqlServer(db_connection_string));
+        services.AddDbContext<WebStoreDB>(opt => opt.UseSqlServer(dbConnectionString));
         break;
     case "Sqlite":
-        services.AddDbContext<WebStoreDB>(opt => opt.UseSqlite(db_connection_string, o => o.MigrationsAssembly("WebStore.DAL.Sqlite")));
+        services.AddDbContext<WebStoreDB>(opt => opt.UseSqlite(dbConnectionString, o => o.MigrationsAssembly("WebStore.DAL.Sqlite")));
         break;
 }
 
 services.AddScoped<DbInitializer>();
 
-services.AddIdentity<User, Role>(/*opt => { opt... }*/)
+services.AddIdentity<User, Role>()
    .AddEntityFrameworkStores<WebStoreDB>()
    .AddDefaultTokenProviders();
 
@@ -55,11 +59,42 @@ services.AddScoped<IProductData, SqlProductData>();
 services.AddScoped<IOrderService, SqlOrderService>();
 
 
-services.AddControllers();
+services.AddControllers(opt =>
+{
+    opt.InputFormatters.Add(new XmlSerializerInputFormatter(opt));
+    opt.OutputFormatters.Add(new XmlSerializerOutputFormatter());
+});
+
 services.AddEndpointsApiExplorer();
-services.AddSwaggerGen();
+services.AddSwaggerGen(opt =>
+{
+    var webstore_webapi_xml = Path.ChangeExtension(Path.GetFileName(typeof(Program).Assembly.Location), ".xml");
+    var webstore_domain_xml = Path.ChangeExtension(Path.GetFileName(typeof(Product).Assembly.Location), ".xml");
+
+    IncludeDocumentation<Program>(opt);
+    IncludeDocumentation<Product>(opt);
+});
+
+static void IncludeDocumentation<T>(SwaggerGenOptions opt)
+{
+    var fileName = Path.ChangeExtension(Path.GetFileName(typeof(T).Assembly.Location), ".xml");
+    const string debugPath = "bin/Debug/net6.0";
+
+    if (File.Exists(fileName))
+        opt.IncludeXmlComments(fileName);
+    else if (File.Exists(Path.Combine(debugPath, fileName)))
+        opt.IncludeXmlComments(Path.Combine(debugPath, fileName));
+}
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var db_initializer = scope.ServiceProvider.GetRequiredService<DbInitializer>();
+    await db_initializer.InitializeAsync(
+        RemoveBefore: app.Configuration.GetValue("DB:Recreate", false),
+        AddTestData: app.Configuration.GetValue("DB:AddTestData", false));
+}
 
 if (app.Environment.IsDevelopment())
 {

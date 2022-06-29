@@ -2,6 +2,7 @@
 using WebStore.Domain.DTO;
 using WebStore.Domain.Entities.Orders;
 using WebStore.Domain.ViewModels;
+using WebStore.Interfaces;
 using WebStore.Interfaces.Services;
 using WebStore.WebAPI.Clients.Base;
 
@@ -9,7 +10,7 @@ namespace WebStore.WebAPI.Clients.Orders;
 
 public class OrdersClient : BaseClient, IOrderService
 {
-    public OrdersClient(HttpClient client) : base(client, "api/orders") { }
+    public OrdersClient(HttpClient client) : base(client, WebApiAdresses.V1.Orders) { }
 
     public async Task<Order> CreateOrderAsync(string username, CartViewModel cart, OrderViewModel orderModel, CancellationToken cancel = default)
     {

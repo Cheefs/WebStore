@@ -3,14 +3,37 @@ using System.Net.Http.Json;
 
 namespace WebStore.WebAPI.Clients.Base;
 
-public abstract class BaseClient
+public abstract class BaseClient: IDisposable
 {
+    private bool _disposed;
     protected HttpClient Http { get; }
     protected string Address { get; }
+
     protected BaseClient(HttpClient client, string address)
     {
         Http = client;
         Address = address;
+    }
+
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (_disposed)
+        {
+            return;
+        }
+
+        _disposed = true;
+
+        if (disposing)
+        {
+            //@todo some stuff
+        }
     }
 
     protected T? Get<T>(string url) => GetAsync<T>(url).Result;
@@ -44,7 +67,7 @@ public abstract class BaseClient
 
     protected async Task<HttpResponseMessage> PutAsync<T>(string url, T body, CancellationToken cancellationToken = default)
     {
-        var response = await Http.PostAsJsonAsync(url, body, cancellationToken).ConfigureAwait(false);
+        var response = await Http.PutAsJsonAsync(url, body, cancellationToken).ConfigureAwait(false);
         return response.EnsureSuccessStatusCode();
     }
 
