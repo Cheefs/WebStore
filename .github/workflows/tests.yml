@@ -1,0 +1,23 @@
+name: Tests
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: 6.0.x
+        
+    - name: Restore dependencies
+      run: dotnet restore WebStore.sln
+      
+    - name: Build
+      run: dotnet build WebStore.sln --no-restore
+      
+    - name: Test
+      run: dotnet test WebStore.sln --no-build --verbosity normal
