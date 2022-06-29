@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -40,24 +41,32 @@ public class AccountController : Controller
             UserName = Model.UserName,
         };
 
+        _Logger.LogTrace($"Начало процесса регистрации нового пользователя {Model.UserName}");
+        var timer = Stopwatch.StartNew();
+
+        using var loggerScope = _Logger.BeginScope($"Регистрация нового пользователя {Model.UserName}");
+
         var creation_result = await _UserManager.CreateAsync(user, Model.Password);
         if (creation_result.Succeeded)
         {
-            _Logger.LogInformation("Пользователь {0} зарегистрирован", user);
+            _Logger.LogInformation($"Пользователь {user} зарегистрирован за {timer.ElapsedMilliseconds} мс");
 
             await _UserManager.AddToRoleAsync(user, Role.Users);
 
+            _Logger.LogInformation($"Пользователю {user} назначена роль {Role.Users}. {timer.ElapsedMilliseconds} мс");
+
             await _SignInManager.SignInAsync(user, false);
+
+            _Logger.LogTrace($"Пользователь {user} пошёл в систему. {timer.ElapsedMilliseconds} мс");
+
             return RedirectToAction("Index", "Home");
         }
 
         foreach (var error in creation_result.Errors)
             ModelState.AddModelError("", error.Description);
 
-        var error_info = string.Join(", ", creation_result.Errors.Select(e => e.Description));
-        _Logger.LogWarning("Ошибка при регистрации пользователя {0}:{1}",
-            user,
-            error_info);
+        var errorInfo = string.Join(", ", creation_result.Errors.Select(e => e.Description));
+        _Logger.LogWarning($"Ошибка при регистрации пользователя {user} ({timer.ElapsedMilliseconds} мс):{errorInfo}");
 
         return View(Model);
     }
@@ -73,6 +82,12 @@ public class AccountController : Controller
         if (!ModelState.IsValid)
             return View(Model);
 
+        _Logger.LogTrace($"Начат вход в систему пользователя {Model.UserName}");
+
+        using var loggerScope = _Logger.BeginScope($"Вход в систему пользователя {Model.UserName}");
+
+        var timer = Stopwatch.StartNew();
+
         var login_result = await _SignInManager.PasswordSignInAsync(
             Model.UserName,
             Model.Password,
@@ -81,20 +96,14 @@ public class AccountController : Controller
 
         if (login_result.Succeeded)
         {
-            _Logger.LogInformation("Пользователь {0} успешно вошёл в систему", Model.UserName);
-
-            //return Redirect(Model.ReturnUrl);
-
-            //if (Url.IsLocalUrl(Model.ReturnUrl))
-            //    return Redirect(Model.ReturnUrl);
-            //return RedirectToAction("Index", "Home");
+            _Logger.LogInformation($"Пользователь {Model.UserName} успешно вошёл в систему. {timer.ElapsedMilliseconds} мс");
 
             return LocalRedirect(Model.ReturnUrl ?? "/");
         }
 
         ModelState.AddModelError("", "Неверное имя пользователя, или пароль");
 
-        _Logger.LogWarning("Ошибка входа пользователя {0} - неверное имя, или пароль", Model.UserName);
+        _Logger.LogWarning($"Ошибка входа пользователя {Model.UserName} - неверное имя, или пароль. {timer.ElapsedMilliseconds} мс");
 
         return View(Model);
     }
