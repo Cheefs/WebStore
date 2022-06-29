@@ -11,6 +11,8 @@ public static class WebApiAdresses
         public const string Products = $"api/v{VERSION}/products";
         public const string Values = $"api/v{VERSION}/values";
 
+        public const string Console = $"api/v{VERSION}/console";
+
         public static class Identity
         {
             public const string Users = $"api/v{VERSION}/identity/users";
