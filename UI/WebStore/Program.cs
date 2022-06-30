@@ -17,6 +17,7 @@ using WebStore.Logging;
 using Serilog;
 using Serilog.Events;
 using Serilog.Formatting.Json;
+using WebStore.Services.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Logging.AddLog4Net();
@@ -107,7 +108,8 @@ static IAsyncPolicy<HttpResponseMessage> GetCircuitBreakerPolicy() =>
        .HandleTransientHttpError()
        .CircuitBreakerAsync(handledEventsAllowedBeforeBreaking: 5, TimeSpan.FromSeconds(30));
 
-services.AddScoped<ICartService, InCookiesCartService>();
+services.AddScoped<ICartStore, InCookiesCartStore>();
+services.AddScoped<ICartService, CartService>();
 
 services.AddControllersWithViews(opt =>
 {
