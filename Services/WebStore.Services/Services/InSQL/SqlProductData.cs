@@ -12,13 +12,13 @@ public class SqlProductData : IProductData
 
     public SqlProductData(WebStoreDB db) => _db = db;
 
-    public IEnumerable<Section> GetSections() => _db.Sections/*.AsEnumerable()*/;
+    public IEnumerable<Section> GetSections() => _db.Sections;
 
     public Section? GetSectionById(int Id) => _db.Sections
        .Include(s => s.Products)
        .FirstOrDefault(s => s.Id == Id);
 
-    public IEnumerable<Brand> GetBrands() => _db.Brands/*.AsEnumerable()*/;
+    public IEnumerable<Brand> GetBrands() => _db.Brands.Include(b => b.Products);
 
     public Brand? GetBrandById(int Id) => _db.Brands
        .Include(b => b.Products)

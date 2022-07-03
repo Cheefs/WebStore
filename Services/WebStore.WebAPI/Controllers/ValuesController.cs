@@ -17,8 +17,6 @@ namespace WebStore.WebAPI.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            throw new Exception();
-
             if (_values.Count == 0)
             {
                 return NoContent();

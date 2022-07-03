@@ -10,7 +10,11 @@ public class BrandsViewComponent : ViewComponent
 
     public BrandsViewComponent(IProductData ProductData) => _ProductData = ProductData;
 
-    public IViewComponentResult Invoke() => View(GetBrands());
+    public IViewComponentResult Invoke(string brandId)
+    {
+        ViewBag.BrandId = (int.TryParse(brandId, out var id) ? id : (int?)null)!;
+        return View(GetBrands());
+    }
 
     private IEnumerable<BrandViewModel> GetBrands() =>
         _ProductData.GetBrands()
@@ -19,5 +23,6 @@ public class BrandsViewComponent : ViewComponent
             {
                 Id = b.Id,
                 Name = b.Name,
-            });
+                ProductsCount = b.Products.Count,
+           });
 }
