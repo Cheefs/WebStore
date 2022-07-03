@@ -1,0 +1,44 @@
+﻿@model BreadcrumbsViewModel
+
+<div class="breadcrumbs">
+    <ol class="breadcrumb">
+        <li>
+            <a asp-controller="Home" asp-action="Index">Главная</a>
+        </li>
+        <li class="active">
+            <a asp-controller="Catalog" asp-action="Index">Каталог</a>
+        </li>
+
+        @if (Model.Section is { Id: var childSectionId, Name: var childSectionName } childSection)
+        {
+            if (childSection.Parent is { Id: var parentSectionId, Name: var parentSectionName })
+            {
+                <li class="active">
+                    <a asp-controller="Catalog" asp-action="Index" asp-route-SectionId="@parentSectionId">
+                        @parentSectionName
+                    </a>
+                </li>
+            }
+
+            <li class="active">
+                <a asp-controller="Catalog" asp-action="Index" asp-route-SectionId="@childSectionId">
+                    @childSectionName
+                </a>
+            </li>
+        }
+
+        @if (Model.Brand is { Id: var brandId, Name: var brandName })
+        {
+            <li class="active">
+                <a asp-controller="Catalog" asp-action="Index" asp-route-BrandId="@brandId">
+                    @brandName
+                </a>
+            </li>
+        }
+
+        @if (Model.Product?.Length > 0)
+        {
+            <li>@Model.Product</li>
+        }
+    </ol>
+</div>
