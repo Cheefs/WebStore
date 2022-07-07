@@ -1,17 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WebStore.Interfaces.TestApi;
 
-namespace WebStore.Controllers
+namespace WebStore.Controllers;
+
+public class WebAPIController : Controller
 {
-    public class WebAPIController : Controller
+    private readonly IValuesService _valuesService;
+
+    public WebAPIController(IValuesService valuesService) => _valuesService = valuesService;
+
+    public IActionResult Index()
     {
-        private readonly IValuesService _valuesService;
-
-        public WebAPIController(IValuesService valuesService) => _valuesService = valuesService;
-
-        public IActionResult Index()
-        {
-            return View(_valuesService.GetValues());
-        }
+        return View(_valuesService.GetValues());
     }
 }

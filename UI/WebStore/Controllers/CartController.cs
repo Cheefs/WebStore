@@ -62,4 +62,28 @@ public class CartController : Controller
         ViewBag.OrderId = Id;
         return View();
     }
+
+    #region WebAPI
+
+    public IActionResult GetCartView() => ViewComponent("Cart");
+
+    public IActionResult AddAPI(int id)
+    {
+        _CartService.Add(id);
+        return Json(new { id, message = $"Товар {id} был добавлен в корзину" });
+    }
+
+    public IActionResult DecrementAPI(int id)
+    {
+        _CartService.Decrement(id);
+        return Ok(new { id, message = $"Количество товара в корзине {id} было уменьшено не 1" });
+    }
+
+    public IActionResult RemoveAPI(int id)
+    {
+        _CartService.Remove(id);
+        return Ok(new { id, message = $"Товар {id} был удалён из корзины" });
+    }
+
+    #endregion
 }
