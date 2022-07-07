@@ -33,7 +33,7 @@ public class CartServiceTests
         _productDataMock = new Mock<IProductData>();
         _productDataMock
             .Setup(s => s.GetProducts(It.IsAny<ProductFilter>()))
-            .Returns(new[]
+            .Returns(new Page<Product>(new[]
             {
                 new Product
                 {
@@ -68,7 +68,7 @@ public class CartServiceTests
                     SectionId = 3,
                     Section = new Section{ Id = 3, Name = "Section 3", Order = 3 },
                 },
-            });
+            }, 1, 3, 3));
 
         _cartStoreMock = new Mock<ICartStore>();
         _cartStoreMock.Setup(c => c.Cart).Returns(_cart);
@@ -160,7 +160,7 @@ public class CartServiceTests
     {
         _cartService.Clear();
 
-        Assert.Empty(_cart.Items);
+        Assert.Empty(_cart?.Items);
     }
 
     [TestMethod]

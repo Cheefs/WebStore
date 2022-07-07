@@ -29,7 +29,7 @@ public class SiteMapApiController : ControllerBase
             new SitemapNode(Url.Action("Index", "Catalog", new { BrandId = s.Id }))
         ));
 
-        nodes.AddRange(ProductData.GetProducts().Select(s =>
+        nodes.AddRange(ProductData.GetProducts().Items.Select(s =>
           new SitemapNode(Url.Action("Details", "Catalog", new { s.Id }))
         ));
 

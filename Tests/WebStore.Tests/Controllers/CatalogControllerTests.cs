@@ -6,6 +6,7 @@ using WebStore.Interfaces.Services;
 using WebStore.Domain.Entities;
 using AutoMapper;
 using WebStore.Domain.ViewModels;
+using Microsoft.Extensions.Configuration;
 
 namespace WebStore.Tests.Controllers;
 
@@ -55,7 +56,8 @@ public class CatalogControllerTests
                 }
             });
         var mapperMock = new Mock<IMapper>();
-        var controller = new CatalogController(productServiceMock.Object, mapperMock.Object);
+        var configurationMock = new Mock<IConfiguration>();
+        var controller = new CatalogController(productServiceMock.Object, mapperMock.Object, configurationMock.Object);
         var result = controller.Details(PRODUCT_ID);
 
         var viewResult = Assert.IsType<ViewResult>(result);

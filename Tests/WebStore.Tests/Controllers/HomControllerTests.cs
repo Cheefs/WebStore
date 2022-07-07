@@ -53,19 +53,18 @@ public class HomControllerTests
     [TestMethod]
     public void Index_returns_with_ViewBag_with_products()
     {
-        var products = Enumerable.Range(1, 100).Select(i => new Product
-        {
-            Id = i,
-            Name = $"Product-{i}",
-            Section = new () { Name = "Section" }
-        });
-        var controller = new HomeController(null!);
+        const int TOTAL_COUNT = 100;
+       
+        var products = Enumerable
+            .Range(1, TOTAL_COUNT)
+            .Select(id => new Product { Id = id, Name = $"Product-{id}", Section = new() { Name = "Section" } });
 
+        var controller = new HomeController(null!);
         var productsMock = new Mock<IProductData>();
 
         productsMock
             .Setup(s => s.GetProducts(It.IsAny<ProductFilter>()))
-            .Returns(products);
+            .Returns(new Page<Product>(products, 1, TOTAL_COUNT, TOTAL_COUNT));
 
         var result = controller.Index(productsMock.Object);
         var viewResult = Assert.IsType<ViewResult>(result);
@@ -73,7 +72,12 @@ public class HomControllerTests
 
         var actualProducts = Assert.IsAssignableFrom<IEnumerable<ProductViewModel>>(actualProductResult);
 
-        Assert.Equal(6, actualProducts.Count());
-        Assert.Equal(products.Select(p => p.Name).Take(6), actualProducts.Select(p => p.Name));
+        Assert.Equal(TOTAL_COUNT, actualProducts.Count());
+        Assert.Equal(
+            products
+                .Select(p => p.Name)
+                .Take(TOTAL_COUNT),
+            actualProducts.Select(p => p.Name)
+        );
     }
 }

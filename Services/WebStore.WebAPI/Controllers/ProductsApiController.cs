@@ -70,7 +70,7 @@ public class ProductsApiController : ControllerBase
     public IActionResult GetProducts([FromBody] ProductFilter productFilter)
     {
         var products = _productData.GetProducts(productFilter);
-        if(products.Any())
+        if(products.TotalCount > 0)
         {
             return Ok(products.ToDTO());
         }

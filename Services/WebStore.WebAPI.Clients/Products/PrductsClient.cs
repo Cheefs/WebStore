@@ -32,17 +32,17 @@ namespace WebStore.WebAPI.Clients.Products
 
         public Product? GetProductById(int id) => Get<ProductDTO>($"{Address}/{id}").FromDTO();
 
-        public IEnumerable<Product> GetProducts(ProductFilter? filter = null)
+        public Page<Product> GetProducts(ProductFilter? filter = null)
         {
             var response = Post(Address, filter ?? new());
             if (response.StatusCode == HttpStatusCode.NoContent)
             {
-                return Enumerable.Empty<Product>();
+                return new(Enumerable.Empty<Product>(), 0, 0, 0);
             }
 
             return response.EnsureSuccessStatusCode()
                 .Content
-                .ReadFromJsonAsync<IEnumerable<ProductDTO>>()
+                .ReadFromJsonAsync<Page<ProductDTO>>()
                 .Result?
                 .FromDTO()!;
         }
