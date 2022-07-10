@@ -61,7 +61,6 @@ services.AddScoped<IEmployeesData, SqlEmployeesData>();
 services.AddScoped<IProductData, SqlProductData>();
 services.AddScoped<IOrderService, SqlOrderService>();
 
-
 services.AddControllers(opt =>
 {
     opt.InputFormatters.Add(new XmlSerializerInputFormatter(opt));
