@@ -18,6 +18,7 @@ using Serilog;
 using Serilog.Events;
 using Serilog.Formatting.Json;
 using WebStore.Services.Services;
+using WebStore.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Logging.AddLog4Net();
@@ -118,6 +119,7 @@ services.AddControllersWithViews(opt =>
 });
 
 services.AddAutoMapper(typeof(Program));
+services.AddSignalR();
 
 var app = builder.Build();
 
@@ -141,6 +143,7 @@ app.UseWelcomePage("/welcome");
 
 app.UseEndpoints(endpoints =>
 {
+    endpoints.MapHub<ChatHub>("/chat");
     endpoints.MapControllerRoute(
         name: "areas",
         pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"

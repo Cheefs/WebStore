@@ -24,14 +24,4 @@ public class WebStoreDB : IdentityDbContext<User, Role, string>
     {
         
     }
-
-    //protected override void OnModelCreating(ModelBuilder db)
-    //{
-    //    base.OnModelCreating(db);
-
-    //    //db.Entity<Section>()
-    //    //   .HasMany(s => s.Products)
-    //    //   .WithOne(p => p.Section)
-    //    //   .OnDelete(DeleteBehavior.Cascade);
-    //}
 }

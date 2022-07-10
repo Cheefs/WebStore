@@ -9,6 +9,8 @@ namespace WebStore.Controllers;
 
 public class CatalogController : Controller
 {
+    private const string CATALOG_PAGE_SIZE = "CatalogPageSize";
+
     private readonly IProductData _productData;
     private readonly IMapper _mapper;
     private readonly IConfiguration _configuration;
@@ -22,7 +24,7 @@ public class CatalogController : Controller
 
     public IActionResult Index([Bind("SectionId,BrandId,PageNumber,PageSize")] ProductFilter filter)
     {
-        filter.PageSize ??= int.TryParse(_configuration["CatalogPageSize"], out var page_size) ? page_size : null;
+        filter.PageSize ??= int.TryParse(_configuration[CATALOG_PAGE_SIZE], out var page_size) ? page_size : null;
         var products = _productData.GetProducts(filter);
 
         return View(new CatalogViewModel
@@ -46,5 +48,13 @@ public class CatalogController : Controller
             return NotFound();
 
         return View(product.ToView());
+    }
+
+    public IActionResult GetProductsAPI([Bind("SectionId,BrandId,PageNumber,PageSize")] ProductFilter filter)
+    {
+        filter.PageSize ??= _configuration.GetValue(CATALOG_PAGE_SIZE, 6);
+
+        var products = _productData.GetProducts(filter);
+        return PartialView("Partial/_Products", products.Items.Select(p => _mapper.Map<ProductViewModel>(p)));
     }
 }

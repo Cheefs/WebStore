@@ -26,6 +26,14 @@ public class AccountController : Controller
     }
 
     [AllowAnonymous]
+    public async Task<IActionResult> IsNameFree(string username)
+    {
+        _Logger.LogInformation($"Проверка наличия пользователя с именем {username}");
+        var user = await _UserManager.FindByNameAsync(username);
+        return Json(user is null ? "true" : $"Пользователь {username} уже существует");
+    }
+
+    [AllowAnonymous]
     public IActionResult Register() => View(new RegisterUserViewModel());
 
     [HttpPost]
