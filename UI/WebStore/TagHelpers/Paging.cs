@@ -9,7 +9,6 @@ namespace WebStore.TagHelpers;
 
 public class Paging : TagHelper
 {
-    private readonly IUrlHelperFactory _urlHelperFactory;
     public PageViewModel PageModel { get; set; } = null!;
 
     public string PageAction { get; set; } = null!;
@@ -20,23 +19,20 @@ public class Paging : TagHelper
     [ViewContext, HtmlAttributeNotBound]
     public ViewContext ViewContext { get; set; } = null!;
 
-    public Paging(IUrlHelperFactory UrlHelperFactory) => _urlHelperFactory = UrlHelperFactory;
-
     public override void Process(TagHelperContext context, TagHelperOutput output)
     {
         var ul = new TagBuilder("ul");
         ul.AddCssClass("pagination");
 
-        var urlHelper = _urlHelperFactory.GetUrlHelper(ViewContext);
         for (var i = 1; i <= PageModel.TotalPages; i++)
         {
-            ul.InnerHtml.AppendHtml(CreateElement(i, urlHelper));
+            ul.InnerHtml.AppendHtml(CreateElement(i));
         }
         
         output.Content.AppendHtml(ul);
     }
 
-    private TagBuilder CreateElement(int PageNumber, IUrlHelper Url)
+    private TagBuilder CreateElement(int PageNumber)
     {
         var li = new TagBuilder("li");
         var a = new TagBuilder("a");
@@ -44,14 +40,24 @@ public class Paging : TagHelper
 
         if (PageNumber != PageModel.Page)
         {
-            PageUrlValues["PageNumber"] = PageNumber;
-            a.Attributes["href"] = Url.Action(PageAction, PageUrlValues);
+            a.Attributes["href"] = "#";
         } 
         else
         {
             li.AddCssClass("active");
         }
 
+        PageUrlValues["PageNumber"] = PageNumber;
+
+        var pageUrlValues = PageUrlValues
+            .Select(v => (v.Key, Value: v.Value?.ToString()))
+            .Where(v => v.Value?.Length > 0);
+
+        foreach (var (key, value) in pageUrlValues)
+        {
+            a.MergeAttribute($"data-{key}", value);
+        }
+            
         li.InnerHtml.AppendHtml(a);
         return li;
     }

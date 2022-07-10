@@ -20,24 +20,26 @@
       "provider": "cdnjs",
       "library": "prettyPhoto@3.1.6",
       "destination": "wwwroot/lib/prettyPhoto/"
+    },
+    {
+      "provider": "cdnjs",
+      "library": "scrollup@2.3.2",
+      "destination": "wwwroot/lib/scrollup/"
+    },
+    {
+      "provider": "cdnjs",
+      "library": "gmaps.js@0.4.9",
+      "destination": "wwwroot/lib/gmaps.js/"
+    },
+    {
+      "provider": "cdnjs",
+      "library": "html5shiv@3.6.2",
+      "destination": "wwwroot/lib/html5shiv/"
+    },
+    {
+      "provider": "cdnjs",
+      "library": "jquery-loading-overlay@2.1.7",
+      "destination": "wwwroot/lib/jquery-loading-overlay/"
     }
-  ,
-{
-  "provider": "cdnjs",
-  "library": "scrollup@2.3.2",
-  "destination": "wwwroot/lib/scrollup/"
-}
-,
-{
-  "provider": "cdnjs",
-  "library": "gmaps.js@0.4.9",
-  "destination": "wwwroot/lib/gmaps.js/"
-}
-,
-{
-  "provider": "cdnjs",
-  "library": "html5shiv@3.6.2",
-  "destination": "wwwroot/lib/html5shiv/"
-}
-]
+  ]
 }
