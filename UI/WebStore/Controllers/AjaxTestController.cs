@@ -40,4 +40,6 @@ public class AjaxTestController : Controller
             Message = msg,
         });
     }
+
+    public IActionResult Chat() => View();
 }
